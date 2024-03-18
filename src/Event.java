@@ -1,11 +1,10 @@
 import java.time.LocalDate;
 import java.util.*;
-import java.util.Scanner;
 public class Event {
 
     Scanner reader = new Scanner(System.in);
-    public final static int capacity = 10_000;
-
+    public final static int capacity = 200;
+    private HashMap<String, Attendee> seatDetails = new HashMap<>(capacity, 0.6f);
     private String eventID;
     private String eventName;
     private String eventVenue;
@@ -14,6 +13,13 @@ public class Event {
 
     public Event(){}
 
+    public void setSeatDetails(String seatNumber, Attendee attendee) {
+        seatDetails.put(seatNumber, attendee);
+    }
+
+    public Attendee getSeatDetails(String seatNumber) {
+        return seatDetails.get(seatNumber);
+    }
     
     public void setEventID(String id){
         eventID = id;
@@ -87,8 +93,13 @@ public class Event {
         System.out.println("Enter the email of the attendee: ");
         String email = reader.nextLine();
 
+        System.out.println("Enter the seat number of the attendee: ");
+        String seat = reader.nextLine();
+
        
-        eventAttendees.add(new Attendee(name, gender, email, age));
+        Attendee attendee = new Attendee(name, gender, email, age, seat);
+        eventAttendees.add(attendee);
+        setSeatDetails(seat, attendee);
         }
         System.out.println("\n"+"All attendees are added.");
         break;
@@ -99,6 +110,7 @@ public class Event {
        for(Attendee attendee : eventAttendees) {
           if(nameToRemove.equals(attendee.getName())){
               eventAttendees.remove(attendee);
+              seatDetails.remove(attendee.getSeat());
               break;
           }
        }
@@ -111,7 +123,7 @@ public class Event {
         for(Attendee attendee : eventAttendees) {
             if(nameToUpdate.equals(attendee.getName())){
                System.out.println("Enter the new name, or enter null if you don' want to update : ");
-                String newName = reader.nextLine();
+               String newName = reader.nextLine();
             if(!newName.equals("null")){
                     attendee.setName(newName);
                 }
@@ -119,7 +131,7 @@ public class Event {
         System.out.println("Enter the new gender, or enter null if you don't want to update :");
         String newGender = reader.nextLine();
             if(!newGender.equals("null")){
-               attendee.setGender(newGender.charAt(0));// "F" -> 'F'
+               attendee.setGender(newGender.charAt(0));
               }
 
         System.out.println("Enter the new age, or enter 0 if you don't want to update :");
@@ -133,6 +145,8 @@ public class Event {
             if(!newEmail.equals("null")){
                attendee.setEmail(newEmail);
               }
+            seatDetails.put(attendee.getSeat(), attendee);
+            System.out.println("Attendee details updated.");
             break;
               } else {
             System.out.println("\nInvalid position. No update performed.");
@@ -159,6 +173,9 @@ public class Event {
 
     case 6:
         System.out.println("Here is the list of attendees: " + "\n" + eventAttendees );
+        for (Attendee attendee : eventAttendees) {
+            System.out.println(attendee.toString() + "\n");
+        }
         break;
 
     case 7:
