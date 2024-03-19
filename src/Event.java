@@ -3,8 +3,6 @@ import java.util.*;
 public class Event {
 
     Scanner reader = new Scanner(System.in);
-    public final static int capacity = 200;
-    private HashMap<String, Attendee> seatDetails = new HashMap<>(capacity, 0.6f);
     private String eventID;
     private String eventName;
     private String eventVenue;
@@ -12,14 +10,6 @@ public class Event {
     ArrayList<Attendee> eventAttendees = new ArrayList<>();
 
     public Event(){}
-
-    public void setSeatDetails(String seatNumber, Attendee attendee) {
-        seatDetails.put(seatNumber, attendee);
-    }
-
-    public Attendee getSeatDetails(String seatNumber) {
-        return seatDetails.get(seatNumber);
-    }
     
     public void setEventID(String id){
         eventID = id;
@@ -93,13 +83,8 @@ public class Event {
         System.out.println("Enter the email of the attendee: ");
         String email = reader.nextLine();
 
-        System.out.println("Enter the seat number of the attendee: ");
-        String seat = reader.nextLine();
-
        
-        Attendee attendee = new Attendee(name, gender, email, age, seat);
-        eventAttendees.add(attendee);
-        setSeatDetails(seat, attendee);
+        new Attendee(name, gender, email, age);
         }
         System.out.println("\n"+"All attendees are added.");
         break;
@@ -110,7 +95,6 @@ public class Event {
        for(Attendee attendee : eventAttendees) {
           if(nameToRemove.equals(attendee.getName())){
               eventAttendees.remove(attendee);
-              seatDetails.remove(attendee.getSeat());
               break;
           }
        }
@@ -145,7 +129,6 @@ public class Event {
             if(!newEmail.equals("null")){
                attendee.setEmail(newEmail);
               }
-            seatDetails.put(attendee.getSeat(), attendee);
             System.out.println("Attendee details updated.");
             break;
               } else {
